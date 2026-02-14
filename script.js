@@ -1,7 +1,9 @@
 // ===============================
 // 0) CONFIG (EDITA AQUÍ)
 // ===============================
-const MAX_TRIES_PER_HOUR = 3; // <-- Cambiá esto para personalizar intentos por hora
+const MAX_TRIES_PER_HOUR = 3;          // <-- intentos por intervalo
+const HANGMAN_INTERVAL_MINUTES = 5;    // <-- intervalo en minutos (antes 60)
+const HANGMAN_INTERVAL_MS = HANGMAN_INTERVAL_MINUTES * 60 * 1000;
 
 // ===============================
 // 1) GRID: flip + sparkles
@@ -63,7 +65,7 @@ modal.addEventListener("click", (e) => {
 });
 
 // ===============================
-// 3) AHORCADO (N jugadas por hora)
+// 3) AHORCADO (N intentos por intervalo)
 //    + localStorage letras usadas
 // ===============================
 const WORD = "ROSTI POLLOS";
@@ -86,11 +88,15 @@ const btnEl = document.getElementById("guessBtn");
 const maxTriesTextEl = document.getElementById("maxTriesText");
 if (maxTriesTextEl) maxTriesTextEl.textContent = MAX_TRIES_PER_HOUR;
 
+// Opcional: si tu HTML tiene <span id="intervalText"></span>
+const intervalTextEl = document.getElementById("intervalText");
+if (intervalTextEl) intervalTextEl.textContent = HANGMAN_INTERVAL_MINUTES;
+
 function nowMs(){ return Date.now(); }
 
 function minutesLeftInWindow(startMs) {
   const elapsed = nowMs() - startMs;
-  const leftMs = Math.max(0, (60 * 60 * 1000) - elapsed);
+  const leftMs = Math.max(0, HANGMAN_INTERVAL_MS - elapsed);
   return Math.ceil(leftMs / 1000 / 60);
 }
 
@@ -110,14 +116,13 @@ function loadHangmanState() {
 
   if (savedTime) {
     const diff = nowMs() - savedTime;
-    if (diff >= 60 * 60 * 1000) {
+    if (diff >= HANGMAN_INTERVAL_MS) {
       resetHangmanState();
       return;
     }
     if (savedTries !== null) tries = Number(savedTries);
     if (savedUsed) guessed = JSON.parse(savedUsed);
   } else {
-    // Si nunca se jugó, asegurar el valor correcto
     tries = MAX_TRIES_PER_HOUR;
   }
 
@@ -160,7 +165,8 @@ function updateHangmanUI() {
 
   const startMs = Number(localStorage.getItem(LS_TIME) || 0);
   if (tries <= 0 && startMs) {
-    cooldownInfoEl.textContent = `Vuelve a intentar en ~${minutesLeftInWindow(startMs)} min 🕒❤️`;
+    cooldownInfoEl.textContent =
+      `Vuelve a intentar en ~${minutesLeftInWindow(startMs)} min 🕒❤️`;
   } else {
     cooldownInfoEl.textContent = "";
   }
@@ -179,7 +185,7 @@ function normalizeLetter(v) {
 
 function guess() {
   const savedTime = Number(localStorage.getItem(LS_TIME) || 0);
-  if (savedTime && (nowMs() - savedTime) >= 60 * 60 * 1000) {
+  if (savedTime && (nowMs() - savedTime) >= HANGMAN_INTERVAL_MS) {
     resetHangmanState();
   }
 
@@ -203,7 +209,7 @@ function guess() {
   }
 
   guessed.push(l);
-  tries--; // SIEMPRE gasta jugada (MAX_TRIES_PER_HOUR por hora)
+  tries--; // consume intento
 
   saveHangmanState();
   updateHangmanUI();
