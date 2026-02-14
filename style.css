@@ -1,0 +1,332 @@
+:root{
+  --bg: #0f0f12;
+  --text: #ffffff;
+  --muted: rgba(255,255,255,.75);
+  --stroke: rgba(255,255,255,.10);
+  --shadow: 0 12px 30px rgba(0,0,0,.45);
+  --radius: 18px;
+}
+
+*{ box-sizing: border-box; }
+html, body { height: 100%; }
+body{
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(1200px 800px at 50% -10%, rgba(255,0,120,.18), transparent 60%),
+              radial-gradient(900px 600px at 10% 20%, rgba(140,100,255,.18), transparent 55%),
+              var(--bg);
+  color: var(--text);
+}
+
+.container{
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+  padding: 22px 0 60px;
+}
+
+.hero{
+  text-align: center;
+  padding: 10px 0 18px;
+}
+
+h1{
+  margin: 10px 0 8px;
+  font-size: clamp(28px, 5vw, 42px);
+}
+
+.intro{
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.section{ margin-top: 26px; }
+.section-title{
+  margin: 0 0 12px;
+  font-size: clamp(18px, 3.2vw, 24px);
+}
+
+.hint{
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* GRID */
+.grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+}
+
+.cardBtn{
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  perspective: 1100px;
+}
+
+.inner{
+  position: relative;
+  width: 100%;
+  height: 270px;
+  border-radius: var(--radius);
+  transform-style: preserve-3d;
+  transition: transform .7s cubic-bezier(.2,.9,.2,1);
+  box-shadow: var(--shadow);
+}
+
+.cardBtn.flipped .inner{
+  transform: rotateY(180deg);
+}
+
+.front, .back{
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  backface-visibility: hidden;
+  border: 1px solid var(--stroke);
+}
+
+.front{ background: #000; }
+
+.front img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.05) saturate(1.05);
+}
+
+.back{
+  transform: rotateY(180deg);
+  background: #fff;
+  color: #111;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+}
+
+.backText{
+  margin: 0;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Sparkles */
+.sparkle-layer{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sparkle{
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.95);
+  filter: drop-shadow(0 0 8px rgba(255,255,255,.9));
+  animation: sparkle 700ms ease-out forwards;
+}
+
+@keyframes sparkle{
+  from{ transform: translate(0,0) scale(1); opacity: 1; }
+  to{ transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+}
+
+/* HANGMAN */
+.hangman-header{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin: 10px 0 14px;
+}
+
+.small{ margin:4px 0; color: var(--muted); }
+
+.hangman-card{
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+.word{
+  margin: 6px 0 12px;
+  font-size: clamp(20px, 4.5vw, 28px);
+  letter-spacing: 6px;
+  text-align: center;
+  user-select: none;
+}
+
+.hangman-controls{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+  margin: 10px 0 6px;
+}
+
+#letter{
+  width: 110px;
+  padding: 12px 12px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.25);
+  color: #fff;
+  outline:none;
+  text-align: center;
+}
+
+#guessBtn{
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 0;
+  cursor:pointer;
+  background: rgba(255,255,255,.9);
+  color: #111;
+  font-weight: 800;
+}
+
+#guessBtn:disabled{ opacity: .45; cursor: not-allowed; }
+
+.tiny{
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Muñequito SVG (FIX FINAL) */
+.little-dude{
+  width: 190px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.dude-svg{
+  width: 190px;
+  height: auto;
+  overflow: visible;
+}
+
+/* cartel */
+.sign rect{
+  fill: #fff;
+  stroke: rgba(0,0,0,.15);
+  stroke-width: 2;
+}
+
+.sign text{
+  font-family: system-ui, Arial, sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  fill: #111;
+}
+
+/* corazón */
+.heartIcon{
+  fill: #ff2d6d;
+  transform-origin: center;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse{
+  0%,100%{ transform: scale(1); }
+  50%{ transform: scale(1.12); }
+}
+
+/* cuerpo */
+.skin{ fill: #f2d6c7; }
+.shirt{ fill: #6aa6ff; }
+
+.limb{
+  stroke-linecap: round;
+  stroke-width: 10px;
+}
+
+.armPath{
+  fill: none;
+  stroke-linejoin: round;
+}
+
+.skinStroke{ stroke: #f2d6c7; }
+.pantStroke{ stroke: #222; }
+
+/* ✅ saludo estable y corto */
+.waveArm{
+  transform-origin: 0px 0px;
+  animation: wave 0.95s infinite ease-in-out;
+}
+
+@keyframes wave{
+  0%{ transform: rotate(8deg); }
+  50%{ transform: rotate(-12deg); }
+  100%{ transform: rotate(8deg); }
+}
+
+/* COUNTER */
+.count-card{
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  text-align: center;
+}
+
+.secret{
+  margin: 6px 0 0;
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+/* MODAL */
+.modal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 1000;
+}
+
+.modal.show{ display: flex; }
+
+.modalBox{
+  width: min(520px, 92vw);
+  background: rgba(255,255,255,.94);
+  color: #111;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.5);
+  text-align: center;
+}
+
+.modalBox h3{ margin: 6px 0 8px; font-size: 22px; }
+.modalBox p{ margin: 0 0 12px; line-height: 1.45; font-weight: 650; }
+
+#modalClose{
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+}
