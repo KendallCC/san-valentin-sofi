@@ -1,7 +1,7 @@
 // ===============================
 // 0) CONFIG (EDITA AQUÍ)
 // ===============================
-const MAX_TRIES_PER_HOUR = 3;          // <-- intentos por intervalo
+const MAX_TRIES_PER_HOUR = 10000;          // <-- intentos por intervalo
 const HANGMAN_INTERVAL_MINUTES = 5;    // <-- intervalo en minutos (antes 60)
 const HANGMAN_INTERVAL_MS = HANGMAN_INTERVAL_MINUTES * 60 * 1000;
 
@@ -233,7 +233,7 @@ loadHangmanState();
 // const END   = new Date("Feb 13 2026 20:05:00").getTime();
 
 // ✅ Real: 14 feb 1:00am -> 2:00pm
-const START = new Date("Feb 14 2026 01:00:00").getTime();
+const START = new Date("Feb 14 2026 00:00:00").getTime();
 const END   = new Date("Feb 14 2026 14:00:00").getTime();
 
 const MESSAGE = "Te amo, eres el amor de mi vida";
@@ -266,3 +266,4 @@ function updateUnlockMessage() {
 
 updateUnlockMessage();
 setInterval(updateUnlockMessage, 1000);
+
